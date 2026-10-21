@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Survi! 🌺🎂</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #ff4b72;
+      --secondary: #ff758c;
+      --accent: #ffb199;
+      --glow: rgba(255, 75, 114, 0.4);
+      --card-bg: rgba(255, 255, 255, 0.82);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at top left, #ffd1dc, #fbc2eb, #a6c1ee);
+      background-size: 300% 300%;
+      animation: gradientShift 10s ease infinite;
+      color: #333;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating Flower and Sparkle Background */
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.85;
+      animation: floatDown 9s linear infinite;
+    }
+
+    @keyframes floatDown {
+      0% {
+        transform: translateY(-10vh) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      20% { opacity: 0.9; }
+      100% {
+        transform: translateY(105vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 520px;
+      padding: 24px 18px 80px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    /* Birthday Header Badge */
+    .date-badge {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #e63963;
+      box-shadow: 0 4px 15px rgba(255, 75, 114, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .title-banner {
+      text-align: center;
+    }
+
+    .title-banner h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      background: linear-gradient(45deg, #d81b60, #ff4081, #ff6f00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 4px 20px rgba(255, 64, 129, 0.2);
+      line-height: 1.2;
+    }
+
+    .title-banner p {
+      font-size: 16px;
+      color: #555;
+      margin-top: 5px;
+      font-weight: 400;
+    }
+
+    /* Phone Wallpaper / Polaroid Display Frame */
+    .phone-frame {
+      width: 100%;
+      max-width: 330px;
+      background: #ffffff;
+      padding: 14px 14px 26px 14px;
+      border-radius: 32px;
+      box-shadow: 0 20px 45px rgba(255, 64, 129, 0.28), 0 0 0 6px rgba(255, 255, 255, 0.6);
+      position: relative;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+    }
+
+    .phone-frame:hover {
+      transform: translateY(-6px) rotate(1deg);
+    }
+
+    /* Little screen notch indicator */
+    .notch {
+      width: 70px;
+      height: 6px;
+      background: #ffd6df;
+      border-radius: 10px;
+      margin: 0 auto 10px auto;
+    }
+
+    .photo-wrapper {
+      position: relative;
+      width: 100%;
+      height: 440px;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #ffeef2;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.06);
+    }
+
+    .photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-wrapper:hover img {
+      transform: scale(1.04);
+    }
+
+    /* Wallpaper decorative sticker */
+    .sticker-flower {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 32px;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25));
+      animation: spinFlower 12s linear infinite;
+    }
+
+    @keyframes spinFlower {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .sticker-heart {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .polaroid-caption {
+      text-align: center;
+      margin-top: 14px;
+      font-family: 'Caveat', cursive;
+      font-size: 24px;
+      color: #e63963;
+      font-weight: 700;
+    }
+
+    /* Glass Card Box */
+    .card-box {
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 30px rgba(255, 105, 135, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      text-align: center;
+    }
+
+    /* Interactive Candle Cake Section */
+    .cake-section h3 {
+      font-size: 19px;
+      color: #d81b60;
+      margin-bottom: 8px;
+    }
+
+    .cake-container {
+      margin: 15px auto;
+      cursor: pointer;
+      display: inline-block;
+      user-select: none;
+    }
+
+    .candle {
+      position: relative;
+      width: 12px;
+      height: 38px;
+      background: repeating-linear-gradient(45deg, #ff758c, #ff758c 6px, #ffffff 6px, #ffffff 12px);
+      border-radius: 4px;
+      margin: 0 auto;
+    }
+
+    .flame {
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 22px;
+      background: radial-gradient(circle, #ffeb3b 20%, #ff5722 80%);
+      border-radius: 50% 50% 20% 20%;
+      box-shadow: 0 0 18px #ff9800;
+      animation: flicker 0.15s infinite alternate;
+      transition: opacity 0.4s ease;
+    }
+
+    .flame.blown-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1) rotate(-1deg); }
+      100% { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+    }
+
+    .cake-base {
+      font-size: 50px;
+      line-height: 1;
+      margin-top: -6px;
+    }
+
+    .wish-hint {
+      font-size: 13px;
+      color: #777;
+      margin-top: 4px;
+    }
+
+    /* Letter from Bestie */
+    .letter-box {
+      text-align: left;
+      line-height: 1.7;
+    }
+
+    .letter-box h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: #c2185b;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .letter-body {
+      font-size: 15px;
+      color: #444;
+      white-space: pre-line;
+    }
+
+    .letter-sign {
+      margin-top: 16px;
+      text-align: right;
+      font-family: 'Caveat', cursive;
+      font-size: 26px;
+      color: #e63963;
+      font-weight: 700;
+    }
+
+    /* Interactive Reasons Grid */
+    .grid-reasons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+
+    .reason-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 18px;
+      padding: 16px 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(255, 105, 135, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      transition: transform 0.25s ease;
+    }
+
+    .reason-card:hover {
+      transform: scale(1.04);
+    }
+
+    .reason-icon {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .reason-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #d81b60;
+    }
+
+    .reason-text {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    /* Action Buttons */
+    .action-btn-group {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(230, 57, 99, 0.3);
+    }
+
+    .btn-primary {
+      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 8px 25px rgba(255, 65, 108, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #ff416c;
+      border: 2px solid #ff416c;
+    }
+
+    .btn-secondary:hover {
+      background: #fff0f3;
+      transform: translateY(-2px);
+    }
+
+    /* Hidden file input for easy photo replacement */
+    #imageUpload {
+      display: none;
+    }
+
+    /* Modal / Popups */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.7);
+      background: white;
+      padding: 24px;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      z-index: 100;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 85%;
+    }
+
+    .popup.show {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .popup h4 {
+      color: #e63963;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .overlay {
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating animated hibiscus petals and hearts -->
+  <div class="floating-elements" id="petalsContainer"></div>
+
+  <div class="container">
+    
+    <!-- Top Date Badge -->
+    <div class="date-badge">
+      ✨ 23 October • Special Day ✨
+    </div>
+
+    <!-- Title Banner -->
+    <div class="title-banner">
+      <h1>Happy Birthday,<br/>Survi! 🌺</h1>
+      <p>To my favorite human & forever bestie! 💖</p>
+    </div>
+
+    <!-- Phone Wallpaper Style Frame -->
+    <div class="phone-frame" onclick="triggerConfettiBurst()" title="Tap for confetti!">
+      <div class="notch"></div>
+      <div class="photo-wrapper">
+        <!-- Default points to survi.jpg. If not found, a lovely aesthetic placeholder is shown -->
+        <img 
+          id="surviPhoto" 
+          src="survi.jpg" 
+          alt="Survi - My Bestie" 
+          onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80';"
+        />
+        <div class="sticker-flower">🌺</div>
+        <div class="sticker-heart">&lt;3</div>
+      </div>
+      <div class="polaroid-caption">My Favorite Wallpaper Forever 🥺💕</div>
+    </div>
+
+    <input type="file" id="imageUpload" accept="image/*" onchange="loadCustomImage(event)">
+
+    <!-- Interactive Cake & Candle Section -->
+    <div class="card-box cake-section">
+      <h3>🎂 Blow Out Your Birthday Candle!</h3>
+      <p class="wish-hint">Click the flame to make a wish for this year ✨</p>
+      
+      <div class="cake-container" onclick="blowCandle()">
+        <div class="candle">
+          <div class="flame" id="candleFlame"></div>
+        </div>
+        <div class="cake-base">🎂</div>
+      </div>
+
+      <p id="wishStatus" style="font-size: 14px; font-weight: 600; color: #ff4081; min-height: 20px;"></p>
+    </div>
+
+    <!-- 4 Little Things that make Survi iconic -->
+    <div class="grid-reasons">
+      <div class="reason-card">
+        <div class="reason-icon">🌺</div>
+        <div class="reason-title">Pure Aesthetic</div>
+        <div class="reason-text">Effortlessly pretty & always brightening the room.</div>
+      </div>
+      <div class="reason-card">
+        <div class="reason-icon">🤝</div>
+        <div class="reason-title">Ride or Die</div>
+        <div class="reason-text">The first person I run to with every tea & drama!</div>
+      </div>
+      <div class="reason-card">
+        <div class="reason-icon">💌</div>
+        <div class="reason-title">23rd October</div>
+        <div class="reason-text">The calendar's best date because you were born.</div>
+      </div>
+      <div class="reason-card">
+        <div class="reason-icon">✨</div>
+        <div class="reason-title">Golden Heart</div>
+        <div class="reason-text">Unmatched laughter, warmth, and pure vibes.</div>
+      </div>
+    </div>
+
+    <!-- Birthday Message Letter -->
+    <div class="card-box letter-box">
+      <h2>Dear Survi,</h2>
+      <div class="letter-body">
+        Happy Birthday to the one who knows all my secrets, laughs at my terrible jokes, and stays by my side through everything! 
+
+        Having you as my best friend is one of the greatest blessings. You have this warm, genuine energy that turns even the most boring days into unforgettable memories. 
+
+        On this 23rd of October, I wish you endless happiness, clear skin, great food, all your dreams turning into reality, and another 100 years of putting up with me! Keep shining like the bright flower you are. 🌺
+      </div>
+      <div class="letter-sign">Forever your Bestie &lt;3</div>
+    </div>
+
+    <!-- Floating Action Buttons -->
+    <div class="action-btn-group">
+      <button class="btn btn-primary" onclick="launchInfiniteConfetti()">
+        🎉 Shower Love
+      </button>
+      <button class="btn btn-secondary" onclick="playHappyChime()">
+        🎵 Birthday Tune
+      </button>
+    </div>
+
+    <small style="color: #666; font-size: 11px; margin-top: 10px;">
+      💡 Tip: Click anywhere on the wallpaper or cake for surprises!
+    </small>
+
+  </div>
+
+  <!-- Pop up celebration dialog -->
+  <div class="overlay" id="overlay" onclick="closePopup()"></div>
+  <div class="popup" id="wishPopup">
+    <h4>WISH GRANTED! 🌟</h4>
+    <p style="color: #555; font-size: 14px; margin-bottom: 16px;">
+      Your birthday wish has officially been sent to the universe. May this year be your sweetest chapter yet, Survi! 🌺🎂
+    </p>
+    <button class="btn btn-primary" style="margin: 0 auto; padding: 10px 24px;" onclick="closePopup()">Aww, Thank You! 💖</button>
+  </div>
+
+  <script>
+    // 1. Floating Petals & Sparkles Generator
+    const symbols = ['🌺', '🌸', '✨', '💖', '🎂', '💕'];
+    const container = document.getElementById('petalsContainer');
+
+    function createPetal() {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDuration = (Math.random() * 5 + 6) + 's';
+      petal.style.fontSize = (Math.random() * 16 + 18) + 'px';
+      container.appendChild(petal);
+
+      setTimeout(() => {
+        petal.remove();
+      }, 10000);
+    }
+    setInterval(createPetal, 450);
+
+    // 2. Confetti Burst
+    function triggerConfettiBurst() {
+      confetti({
+        particleCount: 80,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ff4081', '#ff758c', '#ffd166', '#06d6a0', '#118ab2']
+      });
+    }
+
+    // 3. Candle Blow Out Interaction
+    let wishMade = false;
+    function blowCandle() {
+      const flame = document.getElementById('candleFlame');
+      const status = document.getElementById('wishStatus');
+
+      if (!wishMade) {
+        flame.classList.add('blown-out');
+        wishMade = true;
+        status.textContent = "🎉 Flame blown! Your wish is on its way!";
+        
+        // Huge Confetti Cannon
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.5 }
+        });
+
+        setTimeout(() => {
+          document.getElementById('overlay').classList.add('show');
+          document.getElementById('wishPopup').classList.add('show');
+        }, 600);
+      } else {
+        // Relight candle if tapped again
+        flame.classList.remove('blown-out');
+        wishMade = false;
+        status.textContent = "🔥 Relit! You can make another wish!";
+      }
+    }
+
+    function closePopup() {
+      document.getElementById('overlay').classList.remove('show');
+      document.getElementById('wishPopup').classList.remove('show');
+    }
+
+    // 4. Infinite Confetti Celebration
+    function launchInfiniteConfetti() {
+      const duration = 3 * 1000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+        const particleCount = 50 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+      }, 250);
+    }
+
+    // 5. Synthesized Happy Birthday Chime (Runs smoothly without external audio files)
+    function playHappyChime() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioContext();
+
+        // Happy Birthday opening notes: G4, G4, A4, G4, C5, B4
+        const notes = [
+          { f: 392, d: 0.25 },
+          { f: 392, d: 0.25 },
+          { f: 440, d: 0.5 },
+          { f: 392, d: 0.5 },
+          { f: 523.25, d: 0.5 },
+          { f: 493.88, d: 0.9 }
+        ];
+
+        let currentTime = ctx.currentTime + 0.05;
+
+        notes.forEach(note => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(note.f, currentTime);
+
+          gain.gain.setValueAtTime(0.3, currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, currentTime + note.d);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(currentTime);
+          osc.stop(currentTime + note.d);
+
+          currentTime += note.d + 0.06;
+        });
+
+        triggerConfettiBurst();
+      } catch (e) {
+        console.log("Audio couldn't play automatically", e);
+      }
+    }
+
+    // Double click wallpaper photo to change it dynamically on the fly
+    function loadCustomImage(event) {
+      const reader = new FileReader();
+      reader.onload = function(){
+        const output = document.getElementById('surviPhoto');
+        output.src = reader.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // Initial Celebration Burst on Page Load
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        triggerConfettiBurst();
+      }, 800);
+    });
+  </script>
+</body>
+</html>
